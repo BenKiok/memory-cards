@@ -3,6 +3,7 @@ import '../styling/App.css';
 import Card from './Card.js';
 import BestScore from './BestScore.js';
 import Score from './Score.js';
+import Congrats from './Congrats.js';
 
 function App() {
   const imgSrcArr = [
@@ -21,10 +22,18 @@ function App() {
   const [score, setScore] = useState(0),
         [bestScore, setBestScore] = useState(0),
         [srcIndexArr, setIndexArr] = useState(setRandomIndexes),
-        [prevCardSelection, setCardSelection] = useState([]);
+        [prevCardSelection, setCardSelection] = useState([]),
+        [wonGame, toggleBool] = useState(true);
+  if (wonGame) {
+    return (
+      <div className='App'>
+        <Congrats func={() => toggleBool(false)}/>
+      </div>
+    );
+  }
 
   return (
-    <div className="App">
+    <div className='App'>
       <BestScore bestScore={bestScore}/>
       <h1>Memory Cards</h1>
       <Score score={score}/>
@@ -69,13 +78,13 @@ function App() {
     if (score > 0 && !verifyUniqueCardSelection(cardImg)) {
       setScore(0);
       setCardSelection([]);
-      
+
       if (score > bestScore) {
         setBestScore(score);
       }
     } else if (score === 9) {
       setScore(score + 1);
-      alert("Congradulations you won!");
+      toggleBool(true);
       return;
     } else {
       setScore(score + 1);
