@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import '../styling/App.css';
 import Card from './Card.js';
-import Timer from './Timer.js';
+import BestScore from './BestScore.js';
 import Score from './Score.js';
 
 function App() {
@@ -19,20 +19,13 @@ function App() {
   ];
 
   const [score, setScore] = useState(0),
-        [timer, setTimer] = useState(0),
-        [timerIsSet, toggleTimer] = useState(true),
+        [bestScore, setBestScore] = useState(0),
         [srcIndexArr, setIndexArr] = useState(setRandomIndexes),
         [prevCardSelection, setCardSelection] = useState([]);
 
-  if (timerIsSet) {
-    setTimeout(() => {
-      setTimer(timer + 1);
-    }, 1000);
-  }
-
   return (
     <div className="App">
-      <Timer time={timer}/>
+      <BestScore bestScore={bestScore}/>
       <h1>Memory Cards</h1>
       <Score score={score}/>
       <Card src={imgSrcArr[srcIndexArr[0]]} handler={e => handleCardClick(e)}/>
@@ -76,8 +69,11 @@ function App() {
     if (score > 0 && !verifyUniqueCardSelection(cardImg)) {
       setScore(0);
       setCardSelection([]);
+      
+      if (score > bestScore) {
+        setBestScore(score);
+      }
     } else if (score === 9) {
-      toggleTimer(false);
       setScore(score + 1);
       alert("Congradulations you won!");
       return;
